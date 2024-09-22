@@ -57,7 +57,7 @@ const handleSwipe = async ({ direction, index }: SwipeProps) => {
     if (currentIndex.value + visibleCount > cards.value.length) {
       currentIndex.value = Math.max(0, cards.value.length - visibleCount);
     }
-  }, 100); // Match this with the swipe animation duration
+  }, 400); // Match this with the swipe animation duration
 };
 </script>
 

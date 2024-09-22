@@ -1,4 +1,5 @@
 <template>
+  <h2 style="text-align: center">Smash or Trash</h2>
   <NuxtPage />
 </template>
 
@@ -16,5 +17,9 @@ body,
 #__nuxt {
   height: 100%;
   width: 100%;
+}
+
+body {
+  font-family: "Courier New", Courier, monospace;
 }
 </style>
