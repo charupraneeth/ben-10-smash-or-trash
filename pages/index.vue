@@ -1,18 +1,37 @@
-<script setup>
+<script lang="ts" setup>
 import aliens from "@/assets/aliens.json";
-import SwipeCard from "~/components/SwipeCard.vue";
-import { ref, computed } from "vue";
 
-// Full list of cards
-const cards = ref([...aliens]);
+type AlienCharacter = {
+  id: string;
+  name: string;
+  species: string;
+  homePlanet: string;
+  body: string;
+  description: string;
+  abilities: string[];
+  weaknesses: string[];
+  images: string[];
+  series: string;
+  color: string;
+};
 
-// Track the index of the first visible card
+interface SwipeProps {
+  direction: string;
+  index: number;
+}
+const shuffleArray = (array: AlienCharacter[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+  }
+  return array;
+};
+const cards = useState("aliens", () => shuffleArray([...aliens]));
+
 const currentIndex = ref(0);
 
-// Number of visible cards at a time
 const visibleCount = 3;
 
-// Compute the visible cards
 const visibleCards = computed(() => {
   return cards.value.slice(
     currentIndex.value,
@@ -20,8 +39,7 @@ const visibleCards = computed(() => {
   );
 });
 
-// Handle swipe action
-const handleSwipe = ({ direction, index }) => {
+const handleSwipe = ({ direction, index }: SwipeProps) => {
   console.log(`Swiped ${direction} on card ${currentIndex.value + index + 1}`);
 
   const globalIndex = currentIndex.value + index;
@@ -38,7 +56,7 @@ const handleSwipe = ({ direction, index }) => {
 </script>
 
 <template>
-  <div class="swipe-container">
+  <main>
     <SwipeCard
       v-for="(card, index) in visibleCards"
       :key="card.id"
@@ -50,19 +68,23 @@ const handleSwipe = ({ direction, index }) => {
         <div class="alien-image-container">
           <img :src="card.images[0]" alt="" class="alien-image" />
         </div>
+        <div class="alien-info">
+          <div class="alien-name">{{ card.name }}</div>
+          <div class="alien-description">{{ card.description }}</div>
+        </div>
       </div>
     </SwipeCard>
-  </div>
+  </main>
 </template>
 
 <style lang="scss">
-.swipe-container {
-  position: relative;
-  width: 300px;
-  height: 400px;
-  margin: 100px auto;
+main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 .alien-info {
   pointer-events: none;
 }
@@ -74,13 +96,13 @@ const handleSwipe = ({ direction, index }) => {
 }
 
 .alien-card {
-  position: absolute;
-  top: 0;
-  left: 0;
+  pointer-events: none;
   width: 100%;
   height: 100%;
+  max-height: 500px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 15px;
 }
 </style>
