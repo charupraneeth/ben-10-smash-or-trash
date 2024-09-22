@@ -87,6 +87,15 @@ main {
 }
 .alien-info {
   pointer-events: none;
+  margin-top: 2rem;
+}
+
+.alien-name {
+  font-weight: bold;
+}
+
+.alien-description {
+  margin-top: 1rem;
 }
 
 .alien-image {
@@ -96,7 +105,7 @@ main {
 }
 
 .alien-card {
-  pointer-events: none;
+  overflow: scroll;
   width: 100%;
   height: 100%;
   max-height: 500px;

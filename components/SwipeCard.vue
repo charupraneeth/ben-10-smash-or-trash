@@ -105,6 +105,8 @@ const onTransitionEnd = () => {
 <style scoped>
 .card {
   width: 300px;
+  height: 500px;
+  max-height: fit-content;
   border-radius: 10px;
   position: absolute;
   top: 0;
