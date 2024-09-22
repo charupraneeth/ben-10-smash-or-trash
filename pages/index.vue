@@ -40,8 +40,6 @@ const visibleCards = computed(() => {
 });
 
 const handleSwipe = async ({ direction, index }: SwipeProps) => {
-  console.log(`Swiped ${direction} on card ${currentIndex.value + index + 1}`);
-  console.log({ card: visibleCards.value.at(index) });
   const response = await $fetch(
     `/api/${direction === "right" ? "like" : "dislike"}`,
     {
@@ -49,8 +47,6 @@ const handleSwipe = async ({ direction, index }: SwipeProps) => {
       body: JSON.stringify({ id: visibleCards.value[index].id }),
     }
   );
-
-  console.log({ response });
 
   const globalIndex = currentIndex.value + index;
 
@@ -61,7 +57,7 @@ const handleSwipe = async ({ direction, index }: SwipeProps) => {
     if (currentIndex.value + visibleCount > cards.value.length) {
       currentIndex.value = Math.max(0, cards.value.length - visibleCount);
     }
-  }, 500); // Match this with the swipe animation duration
+  }, 100); // Match this with the swipe animation duration
 };
 </script>
 
