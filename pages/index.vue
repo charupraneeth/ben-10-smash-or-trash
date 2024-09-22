@@ -39,8 +39,18 @@ const visibleCards = computed(() => {
   );
 });
 
-const handleSwipe = ({ direction, index }: SwipeProps) => {
+const handleSwipe = async ({ direction, index }: SwipeProps) => {
   console.log(`Swiped ${direction} on card ${currentIndex.value + index + 1}`);
+  console.log({ card: visibleCards.value.at(index) });
+  const response = await $fetch(
+    `/api/${direction === "right" ? "like" : "dislike"}`,
+    {
+      method: "POST",
+      body: JSON.stringify({ id: visibleCards.value[index].id }),
+    }
+  );
+
+  console.log({ response });
 
   const globalIndex = currentIndex.value + index;
 
