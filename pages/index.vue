@@ -19,6 +19,7 @@ interface SwipeProps {
   direction: string;
   index: number;
 }
+
 const shuffleArray = (array: AlienCharacter[]) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -26,6 +27,7 @@ const shuffleArray = (array: AlienCharacter[]) => {
   }
   return array;
 };
+
 const cards = useState("aliens", () => shuffleArray([...aliens]));
 
 const currentIndex = ref(0);
@@ -39,16 +41,9 @@ const visibleCards = computed(() => {
   );
 });
 
-const handleSwipe = async ({ direction, index }: SwipeProps) => {
-  const response = await $fetch(
-    `/api/${direction === "right" ? "like" : "dislike"}`,
-    {
-      method: "POST",
-      body: JSON.stringify({ id: visibleCards.value[index].id }),
-    }
-  );
-
+const handleSwipe = ({ direction, index }: SwipeProps) => {
   const globalIndex = currentIndex.value + index;
+  const swipedCard = visibleCards.value[index];
 
   // Delay removal to ensure smooth animation
   setTimeout(() => {
@@ -58,6 +53,30 @@ const handleSwipe = async ({ direction, index }: SwipeProps) => {
       currentIndex.value = Math.max(0, cards.value.length - visibleCount);
     }
   }, 400); // Match this with the swipe animation duration
+
+  // Perform the fetch without awaiting to prevent UI delays
+  $fetch(`/api/${direction === "right" ? "like" : "dislike"}`, {
+    method: "POST",
+    body: JSON.stringify({ id: swipedCard.id }),
+  })
+    .then((response) => {
+      // Handle successful response if needed
+      console.log("Action successful:", response);
+    })
+    .catch((error) => {
+      // Handle errors
+      console.error("Error occurred during fetch:", error);
+
+      // Optionally, reverse the card removal if the fetch failed
+      setTimeout(() => {
+        cards.value.splice(globalIndex, 0, swipedCard);
+
+        // Adjust the currentIndex if necessary
+        if (currentIndex.value + visibleCount <= cards.value.length) {
+          currentIndex.value = Math.max(0, currentIndex.value);
+        }
+      }, 400); // Ensure this matches the removal delay
+    });
 };
 </script>
 
