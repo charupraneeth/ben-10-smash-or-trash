@@ -40,6 +40,7 @@ const visibleCards = computed(() => {
     currentIndex.value + visibleCount
   );
 });
+console.log(cards.value);
 
 const handleSwipe = ({ direction, index }: SwipeProps) => {
   const globalIndex = currentIndex.value + index;
@@ -97,7 +98,24 @@ const handleSwipe = ({ direction, index }: SwipeProps) => {
         <div class="alien-info">
           <div class="alien-name">{{ card.name }}</div>
           <div class="alien-description">{{ card.description }}</div>
-          <!-- Additional content that may require scrolling -->
+          <div class="alien-personal-specs">
+            <div>
+              <h4>Species</h4>
+              <div>{{ card.species }}</div>
+            </div>
+            <div>
+              <h4>Anatomy</h4>
+              <div>{{ card.body }}</div>
+            </div>
+          </div>
+          <div class="abilities-wrapper">
+            <h4>Abilities</h4>
+            <AlienAbilities :abilities="card?.abilities" />
+          </div>
+          <div class="weakness-wrapper">
+            <h4>Weakness</h4>
+            <AlienAbilities :abilities="card?.weaknesses" />
+          </div>
         </div>
       </div>
     </SwipeCard>
@@ -140,5 +158,20 @@ main {
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   padding: 15px;
+}
+
+.alien-personal-specs {
+  margin-top: 2rem;
+  display: flex;
+  gap: 3rem;
+  justify-content: flex-start;
+}
+
+.abilities-wrapper,
+.weakness-wrapper {
+  margin-top: 2rem;
+  h4 {
+    margin-bottom: 1rem;
+  }
 }
 </style>
