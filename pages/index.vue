@@ -90,12 +90,14 @@ const handleSwipe = ({ direction, index }: SwipeProps) => {
       @swipe="handleSwipe"
     >
       <div class="alien-card">
+        <!-- Make sure this container allows scrolling -->
         <div class="alien-image-container">
           <img :src="card.images[0]" alt="" class="alien-image" />
         </div>
         <div class="alien-info">
           <div class="alien-name">{{ card.name }}</div>
           <div class="alien-description">{{ card.description }}</div>
+          <!-- Additional content that may require scrolling -->
         </div>
       </div>
     </SwipeCard>
@@ -130,7 +132,7 @@ main {
 }
 
 .alien-card {
-  overflow: scroll;
+  overflow-y: auto; // Enable vertical scrolling
   width: 100%;
   height: 100%;
   max-height: 500px;

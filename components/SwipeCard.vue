@@ -31,6 +31,7 @@ const startPosition = ref({ x: 0, y: 0 });
 const rotatingAngle = ref(0);
 const isDragging = ref(false);
 const dismissed = ref(false);
+const directionLocked = ref(null); // New variable to lock swipe direction
 
 const cardStyles = computed(() => ({
   transform: `translate(${position.value.x}px, ${position.value.y}px) rotate(${rotatingAngle.value}deg)`,
@@ -43,10 +44,13 @@ const startDrag = (event) => {
   if (dismissed.value || isDragging.value) return;
 
   isDragging.value = true;
+  directionLocked.value = null; // Reset direction lock on new drag
   const touchEvent = event.type.includes("touch");
+  const point = touchEvent ? event.touches[0] : event;
+
   startPosition.value = {
-    x: touchEvent ? event.touches[0].clientX : event.clientX,
-    y: touchEvent ? event.touches[0].clientY : event.clientY,
+    x: point.clientX,
+    y: point.clientY,
   };
 };
 
@@ -54,12 +58,29 @@ const dragging = (event) => {
   if (!isDragging.value) return;
 
   const touchEvent = event.type.includes("touch");
-  const currentX = touchEvent ? event.touches[0].clientX : event.clientX;
-  const currentY = touchEvent ? event.touches[0].clientY : event.clientY;
+  const point = touchEvent ? event.touches[0] : event;
 
-  position.value.x = currentX - startPosition.value.x;
-  position.value.y = currentY - startPosition.value.y;
-  rotatingAngle.value = position.value.x / 10;
+  const deltaX = point.clientX - startPosition.value.x;
+  const deltaY = point.clientY - startPosition.value.y;
+
+  // Determine the direction on initial movement
+  if (directionLocked.value === null) {
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      directionLocked.value = "horizontal";
+    } else {
+      directionLocked.value = "vertical";
+      isDragging.value = false; // Cancel dragging for vertical movement
+      return;
+    }
+  }
+
+  if (directionLocked.value === "horizontal") {
+    event.preventDefault(); // Prevent default behavior like scrolling
+
+    position.value.x = deltaX;
+    position.value.y = 0; // Keep y at 0 to prevent vertical movement
+    rotatingAngle.value = position.value.x / 10;
+  }
 };
 
 const endDrag = () => {
@@ -115,5 +136,7 @@ const onTransitionEnd = () => {
   bottom: 0;
   margin: auto;
   user-select: none;
+  /* Allow vertical scrolling, prevent horizontal touch actions */
+  touch-action: pan-y;
 }
 </style>
