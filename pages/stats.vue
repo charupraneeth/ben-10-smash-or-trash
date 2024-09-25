@@ -2,7 +2,6 @@
 const topAliens = ref<unknown[]>([]);
 const fetchStats = async () => {
   const response = await $fetch("/api/stats");
-  console.log({ response });
   topAliens.value = response;
 };
 onMounted(() => {

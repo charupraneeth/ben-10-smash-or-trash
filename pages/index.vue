@@ -40,7 +40,6 @@ const visibleCards = computed(() => {
     currentIndex.value + visibleCount
   );
 });
-console.log(cards.value);
 
 const handleSwipe = ({ direction, index }: SwipeProps) => {
   const globalIndex = currentIndex.value + index;
