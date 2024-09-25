@@ -150,10 +150,10 @@ main {
 }
 
 .alien-card {
-  overflow-y: auto; // Enable vertical scrolling
+  overflow-y: auto;
   width: 100%;
   height: 100%;
-  max-height: 500px;
+  max-height: 600px; /* Updated max-height */
   background: white;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);

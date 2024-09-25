@@ -1,5 +1,5 @@
 <template>
-  <h2 style="text-align: center">Smash or Trash</h2>
+  <h2 style="text-align: center; margin: 0.5rem 0">Smash or Trash</h2>
   <NuxtPage />
 </template>
 
