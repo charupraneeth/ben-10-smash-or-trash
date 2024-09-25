@@ -29,6 +29,9 @@ main {
   display: flex;
   justify-content: center;
 }
+.stats-container {
+  margin-top: 2rem;
+}
 .smashed-item {
   display: flex;
   margin: 1rem 0;
